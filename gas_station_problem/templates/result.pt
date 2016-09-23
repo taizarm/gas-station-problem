@@ -35,16 +35,14 @@
         <form method="POST" action="result" enctype="multipart/form-data">
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-12">
 
-                    <label for="input_file">Input file:</label>
-                    <input id="input_file" name="input_file" type="file" value="" />
+                    <p tal:repeat="item result">
+                        ${item}
+                    </p>
 
                 </div>
 
-                <div class="col-md-8">
-                    <button class="btn btn-default" type="submit">Submit</button>
-                </div>
             </div>
 
         </form>
