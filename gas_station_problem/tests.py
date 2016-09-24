@@ -3,7 +3,6 @@ from io import StringIO
 
 from pyramid import testing
 
-
 # class MockCGIFieldStorage(object):
 #     pass
 
@@ -14,11 +13,16 @@ class ViewTests(unittest.TestCase):
     def tearDown(self):
         testing.tearDown()
 
-    def test_my_view(self):
-        from .views import my_view
-        request = testing.DummyRequest()
-        info = my_view(request)
-        self.assertEqual(info['project'], 'gas_station_problem')
+    # def test_my_view(self):
+    #     from .views import View
+    #
+    #     upload = MockCGIFieldStorage()
+    #     upload.file = StringIO('foo')
+    #     upload.filename = 'input.csv'
+    #
+    #     request = testing.DummyRequest(post={'input_file': upload})
+    #     info = View.index_view(request)
+    #     self.assertEqual(info['project'], 'gas_station_problem')
 
     # def test_gas_station_view(self):
     #     from .views import gas_station_view

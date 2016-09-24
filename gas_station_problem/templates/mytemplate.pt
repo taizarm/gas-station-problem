@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="${request.locale_name}">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gas Station Problem">
-    <meta name="author" content="Taiza Montenegro">
-
     <title>Gas Station Problem</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this scaffold -->
-    <link href="${request.static_url('gas_station_problem:static/theme.css')}" rel="stylesheet">
+    <!-- CSS -->
+    <tal:block tal:repeat="reqt view.reqts['css']">
+        <link rel="stylesheet" type="text/css"
+              href="${request.static_url('deform:static/' + reqt)}"/>
+    </tal:block>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+    <link rel="stylesheet"
+        href="${request.static_url('gas_station_problem:static/bootstrap/css/bootstrap.min.css')}"
+        type="text/css" media="screen" charset="utf-8"/>
+
+    <!-- JS -->
+    <tal:block tal:repeat="reqt view.reqts['js']">
+        <script src="${request.static_url('deform:static/' + reqt)}"
+                type="text/javascript"></script>
+    </tal:block>
+
+
 </head>
-
 <body>
 
 <div class="container">
@@ -31,33 +31,18 @@
     </header>
 
     <section>
-
-        <form method="POST" action="result" enctype="multipart/form-data">
-
-            <div class="row">
-                <div class="col-md-4">
-
-                    <label for="input_file">Input file:</label>
-                    <input id="input_file" name="input_file" type="file" value="" />
-
-                </div>
-
-                <div class="col-md-8">
-                    <button class="btn btn-default" type="submit">Submit</button>
-                </div>
-            </div>
-
-        </form>
-
+       <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">File upload</h3>
+          </div>
+          <div class="panel-body">
+            <div id="form" tal:content="structure form"/>
+          </div>
+        </div>
     </section>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-
 </div>
-
+<script type="text/javascript">
+    deform.load()
+</script>
 </body>
 </html>

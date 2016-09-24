@@ -13,9 +13,13 @@ def construct_array_diff(n, strArr):
 
 def GasStation(strArr):
 
-    n = int(strArr[0])
+    try:
+        n = int(strArr[0])
 
-    array_diff = construct_array_diff(n, strArr)
+        array_diff = construct_array_diff(n, strArr)
+
+    except:
+        return 'invalid input'
 
     smallest_index = 0
     sum = 0
