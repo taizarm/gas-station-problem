@@ -3,7 +3,6 @@
 <head>
     <title>Gas Station Problem</title>
 
-
     <!-- CSS -->
     <tal:block tal:repeat="reqt view.reqts['css']">
         <link rel="stylesheet" type="text/css"
@@ -12,6 +11,10 @@
 
     <link rel="stylesheet"
         href="${request.static_url('gas_station_problem:static/bootstrap/css/bootstrap.min.css')}"
+        type="text/css" media="screen" charset="utf-8"/>
+
+    <link rel="stylesheet"
+        href="${request.static_url('gas_station_problem:static/theme.css')}"
         type="text/css" media="screen" charset="utf-8"/>
 
     <!-- JS -->
@@ -24,14 +27,15 @@
 </head>
 <body>
 
-<div class="container">
-
+<div class="container container-table ">
+<div class="row">
+<div class="col-md-6">
     <header>
         <h1>Gas Station Problem</h1>
     </header>
 
     <section>
-       <div class="panel panel-primary">
+       <div class="panel panel-primary ">
           <div class="panel-heading">
             <h3 class="panel-title">File upload</h3>
           </div>
@@ -40,6 +44,8 @@
           </div>
         </div>
     </section>
+  </div>
+</div>
 </div>
 <script type="text/javascript">
     deform.load()

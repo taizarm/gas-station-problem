@@ -1,25 +1,12 @@
-from pyramid.view import view_config
-from pyramid.response import Response
-
 import os
 import uuid
 import shutil
 import csv
-from gas_station_problem.gasstation import GasStation
+
+from pyramid.view import view_config
+from gas_station_problem.gasstation import GasStationClass
 import colander
 import deform.widget
-
-
-def parse_file(file_path):
-    '''
-        Gets the content of the file uploaded
-    '''
-    results = []
-    with open(file_path, newline='') as input_file:
-        for row in csv.reader(input_file):
-            results.append(row)
-
-    return results
 
 
 class MemoryTmpStore(dict):
@@ -29,13 +16,16 @@ class MemoryTmpStore(dict):
 
 tmpstore = MemoryTmpStore()
 
-
 class FileInput(colander.MappingSchema):
     input_file = colander.SchemaNode(
         deform.FileData(),
         widget=deform.widget.FileUploadWidget(tmpstore)
     )
-
+    output = colander.SchemaNode(
+        colander.String(),
+        widget=deform.widget.TextInputWidget(readonly=True),
+        missing=colander.null,
+    )
 
 class View(object):
     def __init__(self, request):
@@ -44,50 +34,65 @@ class View(object):
     @property
     def file_form(self):
         schema = FileInput()
-        return deform.Form(schema, buttons=('submit',))
+        submit = deform.Button(name='submit', css_class='btn btn-primary')
+        return deform.Form(schema, buttons=(submit,))
 
     @property
     def reqts(self):
         return self.file_form.get_widget_resources()
 
+
+    def read_and_parse_file(self, input_file):
+        '''
+            Get the file uploaded, save in a temporary folder and return the content
+        '''
+        file_path = os.path.join('/tmp', '%s.csv' % uuid.uuid4())
+
+        temp_file_path = file_path + '~'
+
+        input_file.seek(0)
+        with open(temp_file_path, 'wb') as output_file:
+            shutil.copyfileobj(input_file, output_file)
+
+        os.rename(temp_file_path, file_path)
+
+        #Read the content
+        results = []
+        with open(file_path, newline='') as input_file:
+            for row in csv.reader(input_file):
+                results.append(row)
+
+        return results
+
     @view_config(route_name='index_view',
                  renderer='templates/mytemplate.pt')
     def index_view(self):
-        form = self.file_form.render()
 
         if 'submit' in self.request.params:
             #form submission
 
             try:
-                #try to validate the form
+                #validate the form, read the content of uploaded file and call algorithm
 
                 controls = self.request.POST.items()
 
                 values = self.file_form.validate(controls)
 
-                print(values)
-                # input_file = self.request.POST['input_file'].file
-
                 input_file = values['input_file']['fp']
+
+                list_input = self.read_and_parse_file(input_file)
 
                 result = []
 
-                file_path = os.path.join('/tmp', '%s.csv' % uuid.uuid4())
-
-                temp_file_path = file_path + '~'
-
-                input_file.seek(0)
-                with open(temp_file_path, 'wb') as output_file:
-                    shutil.copyfileobj(input_file, output_file)
-
-                os.rename(temp_file_path, file_path)
-
-                list_input = parse_file(file_path)
-
+                gasStationObj = GasStationClass()
                 for l in list_input:
-                    result.append(GasStation(l))
+                    result.append(gasStationObj.GasStation(l))
 
-                return Response('%s' % result)
+                # return Response('%s' % "<br />".join(result))
+                appstruct = {'output': "<br />".join(result)}
+
+                form = self.file_form.render(appstruct=appstruct)
+                return dict(form=form)
 
             except deform.ValidationFailure as e:
                 #form is not valid
@@ -95,4 +100,9 @@ class View(object):
 
         else:
             #simple form rendering
+
+            appstruct = {'output': ' a \\\n b one.&#13;&#10;This'}
+
+
+            form = self.file_form.render(appstruct=appstruct)
             return dict(form=form)
