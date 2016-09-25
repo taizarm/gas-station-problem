@@ -54,7 +54,7 @@ class View(object):
         #Read the content
         results = []
         with open(file_path, newline='') as input_file:
-            for row in csv.reader(input_file):
+            for row in csv.reader(input_file, skipinitialspace=True):
                 results.append(row)
 
         return results

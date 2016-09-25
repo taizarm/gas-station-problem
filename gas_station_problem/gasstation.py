@@ -27,6 +27,8 @@ class GasStationClass(object):
         for i in range(1, n+1):
             gc = strArr[i]
 
+            gc = gc.replace(' ', '')
+
             if not re.match('[0-9]+:[0-9]+', gc):
                 raise Exception
 
