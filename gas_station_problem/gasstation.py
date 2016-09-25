@@ -8,15 +8,10 @@ class GasStationClass(object):
             Validate strArr. Verify if n >=2 and if the size of elements corresponds to n
         '''
 
-        print (strArr[0])
         n = int(strArr[0])
-
-
 
         if n < 2:
             raise Exception
-
-        print (len(strArr) -1)
 
         if len(strArr) -1 != n:
             raise Exception
@@ -47,7 +42,6 @@ class GasStationClass(object):
         '''
 
         try:
-            print('ENTROU')
             n = self.validate_input(strArr)
             array_diff = self.construct_array_diff(n, strArr)
         except:

@@ -21,11 +21,6 @@ class FileInput(colander.MappingSchema):
         deform.FileData(),
         widget=deform.widget.FileUploadWidget(tmpstore)
     )
-    output = colander.SchemaNode(
-        colander.String(),
-        widget=deform.widget.TextInputWidget(readonly=True),
-        missing=colander.null,
-    )
 
 class View(object):
     def __init__(self, request):
@@ -64,8 +59,7 @@ class View(object):
 
         return results
 
-    @view_config(route_name='index_view',
-                 renderer='templates/mytemplate.pt')
+    @view_config(route_name='index_view', renderer='templates/mytemplate.pt')
     def index_view(self):
 
         if 'submit' in self.request.params:
@@ -88,11 +82,8 @@ class View(object):
                 for l in list_input:
                     result.append(gasStationObj.GasStation(l))
 
-                # return Response('%s' % "<br />".join(result))
-                appstruct = {'output': "<br />".join(result)}
-
-                form = self.file_form.render(appstruct=appstruct)
-                return dict(form=form)
+                form = self.file_form.render()
+                return dict(form=form, response_text=result)
 
             except deform.ValidationFailure as e:
                 #form is not valid
@@ -101,8 +92,5 @@ class View(object):
         else:
             #simple form rendering
 
-            appstruct = {'output': ' a \\\n b one.&#13;&#10;This'}
-
-
-            form = self.file_form.render(appstruct=appstruct)
-            return dict(form=form)
+            form = self.file_form.render()
+            return dict(form=form, response_text='')
