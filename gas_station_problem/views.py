@@ -87,7 +87,7 @@ class View(object):
 
             except deform.ValidationFailure as e:
                 #form is not valid
-                return dict(form=e.render())
+                return dict(form=e.render(), response_text='')
 
         else:
             #simple form rendering
